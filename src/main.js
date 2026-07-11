@@ -5,6 +5,8 @@ import { OrbitControls} from "three/examples/jsm/controls/OrbitControls"
 // scene
 const scene = new THREE.Scene()
 
+const clock = new THREE.Clock()
+
 
 // camera 
 const camera = new THREE.PerspectiveCamera(
@@ -46,7 +48,12 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 
 // animation
 const animate = () => {
-  // cube.rotation.y += 0.1
+
+  const delta = clock.getElapsedTime()
+
+  console.log(delta)
+
+  cube.rotation.y = delta
 
   controls.update()
 
