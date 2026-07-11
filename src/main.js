@@ -1,5 +1,6 @@
 import './style.css'
 import * as THREE from "three"
+import { OrbitControls} from "three/examples/jsm/controls/OrbitControls"
 
 // scene
 const scene = new THREE.Scene()
@@ -37,13 +38,17 @@ const renderer = new THREE.WebGLRenderer({
   canvas
 })
 
+const controls = new OrbitControls(camera, renderer.domElement)
+
 renderer.setSize(window.innerWidth, window.innerHeight)
 
 
 
 // animation
 const animate = () => {
-  cube.rotation.y += 0.1
+  // cube.rotation.y += 0.1
+
+  controls.update()
 
   renderer.render(scene, camera)
 
