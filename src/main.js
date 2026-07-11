@@ -1,6 +1,6 @@
 import './style.css'
 import * as THREE from "three"
-import { OrbitControls} from "three/examples/jsm/controls/OrbitControls"
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 
 const size = {
   width: window.innerWidth,
@@ -10,25 +10,62 @@ const size = {
 // scene
 const scene = new THREE.Scene()
 
-const clock = new THREE.Clock()
+const clock = new THREE.Timer()
+
+// texture
+const textureLoader = new THREE.TextureLoader()
+
+
+const texture = textureLoader.load(
+  "https://images.unsplash.com/photo-1777720871398-ee7a22a72f78?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  () => {
+    console.log("texture loaded")
+  },
+  () => {
+    console.log("texture is loading")
+  },
+  () => {
+    console.log("texture error")
+  }
+)
 
 
 // camera 
 const camera = new THREE.PerspectiveCamera(
-    75, // field of view
-    size.width / size.height, // aspect ratio
-    0.01, // near
-    100 // far
+  75, // field of view
+  size.width / size.height, // aspect ratio
+  0.01, // near
+  100 // far
 )
 
 camera.position.z = 5
 
 
+const ambientLight = new THREE.AmbientLight("#ffffff", 0.2)
+scene.add(ambientLight)
+
+
+// const directionalLight = new THREE.DirectionalLight("#ffffff", 1)
+
+// directionalLight.position.set(2, 2, 2)
+// scene.add(directionalLight)
+
+// const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight)
+// scene.add(directionalLightHelper)
+
+
+// const pointLight = new THREE.PointLight("#ffffff", 2, 10, 1) 
+// pointLight.position.set(2, 2, 2)
+// scene.add(pointLight)
+
+// const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.2)
+// scene.add(pointLightHelper)
+
 // mesh
 const geometry = new THREE.BoxGeometry(1, 1, 1)
 
-const material = new THREE.MeshBasicMaterial({
-  color: "red",
+const material = new THREE.MeshStandardMaterial({
+  color: "red"
 })
 
 const cube = new THREE.Mesh(geometry, material)
@@ -61,13 +98,15 @@ window.addEventListener("resize", () => {
 
 
 // animation
-const animate = () => {
+const animate = (timestamp) => {
 
-  const delta = clock.getElapsedTime()
+  clock.update(timestamp)
 
-  console.log(delta)
+  const delta = clock.getElapsed()
 
-  cube.rotation.y = delta
+  // console.log(delta)
+
+  // cube.rotation.y = delta
 
   controls.update()
 
@@ -76,4 +115,4 @@ const animate = () => {
   requestAnimationFrame(animate)
 }
 
-animate()
+requestAnimationFrame(animate)
