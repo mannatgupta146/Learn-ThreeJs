@@ -1,6 +1,8 @@
 import './style.css'
 import * as THREE from "three"
+import { HDRLoader, RGBELoader } from 'three/examples/jsm/Addons.js'
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+
 
 const size = {
   width: window.innerWidth,
@@ -29,6 +31,16 @@ const texture = textureLoader.load(
   }
 )
 
+// rgba loader
+const envMap = new RGBELoader()
+
+envMap.load('./envMap.hdr', (envMap) => {
+  envMap.mapping = THREE.EquirectangularReflectionMapping
+
+  // scene.background = envMap
+  scene.environment = envMap
+})
+
 
 // camera 
 const camera = new THREE.PerspectiveCamera(
@@ -41,7 +53,7 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.z = 5
 
 
-const ambientLight = new THREE.AmbientLight("#ffffff", 0.2)
+const ambientLight = new THREE.AmbientLight("#ffffff", 1.2)
 scene.add(ambientLight)
 
 
@@ -65,7 +77,9 @@ scene.add(ambientLight)
 const geometry = new THREE.BoxGeometry(1, 1, 1)
 
 const material = new THREE.MeshStandardMaterial({
-  color: "red"
+  color: "red",
+  metalness: 0.8,
+  roughness: 0.01,
 })
 
 const cube = new THREE.Mesh(geometry, material)
