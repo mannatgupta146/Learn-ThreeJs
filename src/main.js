@@ -1,6 +1,6 @@
 import './style.css'
 import * as THREE from "three"
-import { HDRLoader, RGBELoader } from 'three/examples/jsm/Addons.js'
+import { GLTFLoader, HDRLoader, RGBELoader } from 'three/examples/jsm/Addons.js'
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 
 
@@ -41,6 +41,24 @@ envMap.load('./envMap.hdr', (envMap) => {
   scene.environment = envMap
 })
 
+// gltf loader
+const gltfLoader = new GLTFLoader()
+let mixer
+
+gltfLoader.load("./robot.glb", (gltf) => {
+  const model = gltf.scene
+
+  model.position.y = -2
+
+  mixer = new THREE.AnimationMixer(model)
+
+  const action = mixer.clipAction(gltf.animations[0])
+
+  action.play()
+
+  scene.add(model)
+})
+
 
 // camera 
 const camera = new THREE.PerspectiveCamera(
@@ -73,18 +91,19 @@ scene.add(ambientLight)
 // const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.2)
 // scene.add(pointLightHelper)
 
+
 // mesh
-const geometry = new THREE.BoxGeometry(1, 1, 1)
+// const geometry = new THREE.BoxGeometry(1, 1, 1)
 
-const material = new THREE.MeshStandardMaterial({
-  color: "red",
-  metalness: 0.8,
-  roughness: 0.01,
-})
+// const material = new THREE.MeshStandardMaterial({
+//   color: "red",
+//   metalness: 0.8,
+//   roughness: 0.01,
+// })
 
-const cube = new THREE.Mesh(geometry, material)
+// const cube = new THREE.Mesh(geometry, material)
 
-scene.add(cube)
+// scene.add(cube)
 
 
 // canvas(big screen)
@@ -117,10 +136,15 @@ const animate = (timestamp) => {
   clock.update(timestamp)
 
   const delta = clock.getElapsed()
+  const newDelta = clock.getDelta()
 
   // console.log(delta)
 
   // cube.rotation.y = delta
+
+  if(mixer){
+    mixer.update(newDelta)
+  }
 
   controls.update()
 
