@@ -41,23 +41,24 @@ envMap.load('./envMap.hdr', (envMap) => {
   scene.environment = envMap
 })
 
-// gltf loader
-const gltfLoader = new GLTFLoader()
 let mixer
 
-gltfLoader.load("./robot.glb", (gltf) => {
-  const model = gltf.scene
+// gltf loader
+// const gltfLoader = new GLTFLoader()
 
-  model.position.y = -2
+// gltfLoader.load("./robot.glb", (gltf) => {
+//   const model = gltf.scene
 
-  mixer = new THREE.AnimationMixer(model)
+//   model.position.y = -2
 
-  const action = mixer.clipAction(gltf.animations[0])
+//   mixer = new THREE.AnimationMixer(model)
 
-  action.play()
+//   const action = mixer.clipAction(gltf.animations[0])
 
-  scene.add(model)
-})
+//   action.play()
+
+//   scene.add(model)
+// })
 
 
 // camera 
@@ -93,17 +94,17 @@ scene.add(ambientLight)
 
 
 // mesh
-// const geometry = new THREE.BoxGeometry(1, 1, 1)
+const geometry = new THREE.BoxGeometry(1, 1, 1)
 
-// const material = new THREE.MeshStandardMaterial({
-//   color: "red",
-//   metalness: 0.8,
-//   roughness: 0.01,
-// })
+const material = new THREE.MeshStandardMaterial({
+  color: "red",
+  metalness: 0.8,
+  roughness: 0.01,
+})
 
-// const cube = new THREE.Mesh(geometry, material)
+const cube = new THREE.Mesh(geometry, material)
 
-// scene.add(cube)
+scene.add(cube)
 
 
 // canvas(big screen)
