@@ -104,7 +104,28 @@ const material = new THREE.MeshStandardMaterial({
 
 const cube = new THREE.Mesh(geometry, material)
 
+const raycaster = new THREE.Raycaster()
+
+const mouse = new THREE.Vector2()
+
+window.addEventListener("mousemove", (e) => {
+  mouse.x = (e.clientX / window.innerWidth) * 2 - 1
+  mouse.y = -((e.clientY / window.innerHeight) * 2 - 1)
+
+})
+
 scene.add(cube)
+
+window.addEventListener("click", (e) => {
+  raycaster.setFromCamera(mouse, camera)
+
+  const intersect = raycaster.intersectObject(cube)
+
+  if(intersect.length){
+    cube.material.color.set("green")
+  }
+
+})
 
 
 // canvas(big screen)
